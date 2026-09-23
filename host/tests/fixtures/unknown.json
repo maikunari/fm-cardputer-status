@@ -1,0 +1,55 @@
+{
+  "schema": "fm-secondmate-home-summary.v1",
+  "hold_classifier_schema": "fm-captain-hold-buckets.v1",
+  "generated": "2026-09-23T07:52:15Z",
+  "generated_epoch": 1790149935,
+  "home": "/home/maikunari/Projects/firstmate",
+  "valid": false,
+  "reason": "child current state unavailable: evosus-helper-ui-polish-fix-nav-links",
+  "invalidity": {
+    "kind": "child_current_unavailable",
+    "ids": [
+      "evosus-helper-ui-polish-fix-nav-links"
+    ]
+  },
+  "state": "unknown",
+  "active_children": [
+    {
+      "id": "evosus-helper-ui-polish-fix-nav-links",
+      "kind": "ship",
+      "state": "working",
+      "repo": "evosus-helper",
+      "name": "Evosus Helper: polish UI + fix Lint/Cost unreliable",
+      "source": "status-log",
+      "doing": "reproduced — /api/lint returns bare unstyled HTML outside app shell; /cost-unreliable has no-shell empty state, picks la…"
+    }
+  ],
+  "decisions_open": [],
+  "holds": [],
+  "queued": [],
+  "landed": [],
+  "endpoints": [
+    {
+      "id": "evosus-helper-ui-polish-fix-nav-links",
+      "state": "unknown",
+      "source": "status-log",
+      "endpoint": {
+        "target": "default:w22:p2",
+        "exists": true,
+        "agent_alive": "not_checked",
+        "status": "unknown",
+        "observed_at": "2026-09-23T07:52:15Z",
+        "freshness": "fresh"
+      }
+    }
+  ],
+  "counts": {
+    "active_children": 1,
+    "decisions_open": 0,
+    "holds": 0,
+    "queued": 0,
+    "landed": 0,
+    "endpoints": 1
+  },
+  "omitted": []
+}

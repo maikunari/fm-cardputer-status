@@ -1,0 +1,4 @@
+# Real device config carries Wi-Fi credentials and the token.
+firmware/fm_status_cfg.json
+__pycache__/
+*.pyc
