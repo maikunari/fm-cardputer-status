@@ -13,7 +13,7 @@ screen shows one colour:
 A dead pipeline never shows green.
 
 ```
- th50 (desk)                                          Cardputer-ADV (UiFlow2 + Buddy launcher)
+ desk host (Linux)                                    Cardputer-ADV (UiFlow2 + Buddy launcher)
  Firstmate (unchanged) writes state/home-summary.json
         │ read-only                                   /flash/main.py  (Buddy launcher)
  host/fmstatus/publisher.py  ── GET /status ─Wi-Fi──►   ├─ apps/claude_buddy.py
@@ -35,11 +35,11 @@ Device checks (M0): [docs/device-notes.md](docs/device-notes.md).
 
 ```
 firmware/apps/fm_status.py          device app (MicroPython, single file)
-firmware/fm_status_cfg.example.json device config template (real one is gitignored)
+firmware/fm_status_cfg.example.json device config template (copy → gitignored real cfg)
 firmware/push.sh                    copy app + config to the device over USB-serial
 host/fmstatus/rules.py              pure mapping: home-summary -> level/label/counts
 host/fmstatus/publisher.py          stdlib HTTP server: GET /status, /healthz
-host/tests/                         unittest suite + trimmed real summary fixtures
+host/tests/                         unittest suite + trimmed summary fixtures
 host/systemd/                       systemd --user unit + env template
 host/install-service.sh             installs the unit and env file
 ```
@@ -50,9 +50,10 @@ Needs only `python3` (3.8+ stdlib).
 
 ```sh
 cd host
-python3 -m unittest discover -s tests -t .                 # 53 tests, no deps
-FM_HOME=~/Projects/firstmate python3 -m fmstatus.publisher --once   # print one payload
-FM_HOME=~/Projects/firstmate python3 -m fmstatus.publisher          # serve on LAN-IP:8765
+python3 -m unittest discover -s tests -t .                 # no third-party deps
+export FM_HOME=/path/to/your/firstmate/home                # directory that contains state/
+python3 -m fmstatus.publisher --once                       # print one payload
+python3 -m fmstatus.publisher                              # serve on this machine's LAN IP:8765
 ```
 
 Settings are environment variables (full list in
@@ -70,35 +71,40 @@ Settings are environment variables (full list in
 ### Run it as a service
 
 ```sh
-host/install-service.sh          # writes the unit + ~/.config/fm-cardputer-status/env (mode 600)
+export FM_HOME=/path/to/your/firstmate/home
+host/install-service.sh          # unit + ~/.config/fm-cardputer-status/env (mode 600)
 $EDITOR ~/.config/fm-cardputer-status/env    # set FMS_TOKEN (and FMS_BIND if needed)
 systemctl --user enable --now fm-cardputer-status.service
 systemctl --user status fm-cardputer-status.service
-curl "http://<th50 LAN IP>:8765/status?t=<token>"      # e.g. 192.168.0.9
+# replace HOST with this machine's LAN IPv4
+curl "http://HOST:8765/status?t=<token>"
 ```
 
 The unit points at this checkout, so re-run `install-service.sh` if you move
 it. To keep it running while you're logged out: `loginctl enable-linger`.
 
-th50 runs `ufw`. Allow the device's LAN in:
+If the host firewall blocks inbound LAN traffic, allow the publisher port (example with `ufw`):
 
 ```sh
 sudo ufw allow from 192.168.0.0/24 to any port 8765 proto tcp
 ```
 
+Adjust the subnet to match your LAN.
+
 ## Device: install the app
 
 One-time setup:
 
-1. **Serial access.** `/dev/ttyACM0` is `root:uucp 0660`:
-   `sudo usermod -aG uucp "$USER"`, then log out and back in.
+1. **Serial access.** On typical Linux the node is `root:uucp 0660`:
+   `sudo usermod -aG uucp "$USER"`, then start a **new login session** (full
+   reboot is the reliable fix if linger kept an old session).
 2. **A pusher**, either:
    - `pipx install mpremote` (preferred), or
    - a clone of [moremas/build-with-claude](https://github.com/moremas/build-with-claude)
      plus `pyserial`, with `BUDDY_REPO=/path/to/build-with-claude`. Its
-     `buddy/scripts/push.py` is the one proven against the Buddy bundle.
+     `buddy/scripts/push.py` is proven against the Buddy bundle.
 3. **Check the device** (M0): run the probe in
-   [docs/device-notes.md](docs/device-notes.md) and paste the output there.
+   [docs/device-notes.md](docs/device-notes.md).
 
 ### Wi-Fi and token ("pairing")
 
@@ -110,7 +116,7 @@ $EDITOR firmware/fm_status_cfg.json
 | Key | |
 |---|---|
 | `ssid`, `psk` | a 2.4 GHz network. Leave `ssid` empty to reuse a link the launcher already brought up |
-| `url` | `http://<th50 LAN IP>:8765/status` |
+| `url` | `http://<desk-host-LAN-IP>:8765/status` |
 | `token` | the same value as `FMS_TOKEN` in the publisher's env file. That's the whole pairing step |
 | `poll_s` | poll interval, default 5 |
 | `chirp` | `true` to beep once on entering red (off by default; toggle on the device with `m`) |
@@ -162,13 +168,13 @@ Buddy and everything else are untouched.
 
 | Symptom | Fix |
 |---|---|
-| `push.sh: no read/write access` | join `uucp` (above) and log in again |
+| `push.sh: no read/write access` | join `uucp` (above) and start a new login session |
 | `push.sh: found 0 Cardputer serial links` | cable/hub; `lsusb` should list `303a:816b`. Pass `--port` if the name differs |
 | Device stuck on `waiting for wifi` | wrong `ssid`/`psk`, or a 5 GHz-only network |
-| `no wifi` / `stale - no data` with a timeout | `ufw` rule missing, wrong IP in `url`, or the publisher is down (`systemctl --user status fm-cardputer-status`) |
+| `no wifi` / `stale - no data` with a timeout | firewall rule missing, wrong IP in `url`, or the publisher is down (`systemctl --user status fm-cardputer-status`) |
 | `bad token` in the footer | `token` in the device config ≠ `FMS_TOKEN` |
 | `fm stale 20m` | Firstmate's watcher isn't refreshing `home-summary.json` (normally every ≤300 s) |
-| `fm unknown` | Firstmate itself reports `state: unknown` (invalid backlog/child state); check Bearings |
+| `fm unknown` | Firstmate itself reports `state: unknown` (invalid backlog/child state) |
 | Boot takes ~8 s longer | Buddy's `main.py` tries its event SSID `cardputer` on every boot; harmless |
 | `no config` / `config: bad url` | push `fm_status_cfg.json`; the URL must start with `http://` |
 
@@ -177,12 +183,10 @@ fixture from `host/tests/fixtures/` and bump its `generated_epoch` to now.
 
 ## Follow-ups (not in this MVP)
 
-- **M0 on the real unit**: run once `uucp` access exists; record in
-  `docs/device-notes.md`.
-- **M5 USB-serial fallback** (`FMS1 <level> <label>` lines over USB-CDC, when
-  there's no Wi-Fi). Not built. The CDC port is the MicroPython REPL, so it
+- **M5 USB-serial fallback** (`FMS1 <level> <label>` lines over USB-CDC when
+  there is no Wi-Fi). Not built. The CDC port is the MicroPython REPL, so it
   needs care: never send control bytes, frame every line.
 - **v1.1 (touches Firstmate)**: a `wedge_suspects` field in the home summary so
   a wedged crew shows red, plus an optional faster summary cadence
   (`FM_HOME_SUMMARY_INTERVAL=60`). Until then, red can lag by up to 5 minutes.
-- Secondmate homes are not rolled up (none are registered today).
+- Secondmate home roll-up (optional later).

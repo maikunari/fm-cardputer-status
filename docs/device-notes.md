@@ -1,39 +1,32 @@
 # Device notes (milestone M0)
 
-## Status: not yet verified on the device
+Fill this in for **your** unit after first connect. Do not commit real serial
+numbers, hostnames, or LAN addresses if you fork publicly.
 
-The build worker could not open the serial port, so the M0 checks below have
-not been run. What was observed from the host on 2026-09-23:
+## Expected hardware
 
-| Check | Result |
+| Check | What you want to see |
 |---|---|
-| `lsusb` | `303a:816b M5Stack Cardputer-ADV(UiFlow2)`, so UiFlow2 MicroPython firmware |
-| Serial link | `/dev/serial/by-id/usb-M5Stack_Cardputer-ADV_UiFlow2__aca70402975c0000-if00 -> ../../ttyACM0` |
-| Permissions | `/dev/ttyACM0` is `root:uucp 0660`; the desk user is not in `uucp` yet |
-| Host pushers | Neither `mpremote` nor `pyserial` is installed |
-| Firewall | `ufw` is active on th50, so port 8765 needs an allow rule for the LAN |
+| `lsusb` | `303a:816b M5Stack Cardputer-ADV(UiFlow2)` (UiFlow2 MicroPython) |
+| Serial symlink | `/dev/serial/by-id/usb-M5Stack_Cardputer-ADV*` → a `ttyACM*` node |
+| Permissions | node is typically `root:uucp 0660`; your user must be in group `uucp` |
+| Pusher | `mpremote` (or Buddy `push.py` + `pyserial`) available on `PATH` |
 
-## To do once `uucp` access exists
+## Probe once `uucp` access works
 
-1. `sudo usermod -aG uucp "$USER"`, then log out and back in.
-2. Install a pusher: `pipx install mpremote` (or `python3 -m pip install --user mpremote`).
-3. List the filesystem and probe modules without changing anything:
-
-   ```sh
-   mpremote connect /dev/serial/by-id/usb-M5Stack_Cardputer-ADV* exec "
-   import os, sys
-   print('flash', os.listdir('/flash'))
-   print('apps', os.listdir('/flash/apps'))
-   print(sys.implementation)
-   for m in ('network', 'usocket', 'socket', 'requests2', 'urequests'):
-       try:
-           __import__(m); print(m, 'ok')
-       except ImportError as e:
-           print(m, 'missing', e)
-   "
-   ```
-
-4. Paste the output below.
+```sh
+mpremote connect /dev/serial/by-id/usb-M5Stack_Cardputer-ADV* exec "
+import os, sys
+print('flash', os.listdir('/flash'))
+print('apps', os.listdir('/flash/apps'))
+print(sys.implementation)
+for m in ('network', 'usocket', 'socket', 'requests2', 'urequests'):
+    try:
+        __import__(m); print(m, 'ok')
+    except ImportError as e:
+        print(m, 'missing', e)
+"
+```
 
 The app needs `network` and `usocket` (or `socket`). It does not use
 `requests2` or `urequests`: it speaks HTTP/1.0 over a raw socket so the 3 s
@@ -46,4 +39,4 @@ check before pushing.
 
 ## Observed output
 
-_(pending)_
+_(paste your probe output here locally; keep forks free of identifying detail)_

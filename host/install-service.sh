@@ -23,7 +23,7 @@ if [ -e "$ENV_FILE" ]; then
   echo "kept existing $ENV_FILE"
 else
   umask 077
-  sed "s|@FM_HOME@|${FM_HOME:-$HOME/Projects/firstmate}|" "$HOST_DIR/systemd/env.example" > "$ENV_FILE"
+  sed "s|@FM_HOME@|${FM_HOME:?set FM_HOME to your Firstmate home directory}|" "$HOST_DIR/systemd/env.example" > "$ENV_FILE"
   echo "wrote $ENV_FILE (set FMS_TOKEN before exposing it on the LAN)"
 fi
 

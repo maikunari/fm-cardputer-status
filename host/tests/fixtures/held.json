@@ -3,7 +3,7 @@
   "hold_classifier_schema": "fm-captain-hold-buckets.v1",
   "generated": "2026-09-23T07:52:15Z",
   "generated_epoch": 1790149935,
-  "home": "/home/maikunari/Projects/firstmate",
+  "home": "/home/user/firstmate",
   "valid": true,
   "reason": null,
   "invalidity": {
@@ -15,12 +15,12 @@
   "decisions_open": [],
   "holds": [
     {
-      "id": "rais-rewrite-34-descriptions-extract-mod-79",
+      "id": "task-1",
       "title": "rais-rewrite-34-descriptions-extract-mod-79",
       "blocked_by": null,
       "blocked_by_ids": [],
       "unresolved_blocker_ids": [],
-      "reason": "ack option (c) — waiting for MCP part-description write tool to deploy; rewrites.json + interim report.md ready, nothing…",
+      "reason": "ack option (c) \u2014 waiting for MCP part-description write tool to deploy; rewrites.json + interim report.md ready, nothing\u2026",
       "source": "child-state"
     }
   ],
@@ -28,7 +28,7 @@
   "landed": [],
   "endpoints": [
     {
-      "id": "rais-rewrite-34-descriptions-extract-mod-79",
+      "id": "task-1",
       "state": "paused",
       "source": "status-log",
       "endpoint": {

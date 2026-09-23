@@ -3,7 +3,7 @@
   "hold_classifier_schema": "fm-captain-hold-buckets.v1",
   "generated": "2026-09-23T07:52:15Z",
   "generated_epoch": 1790149935,
-  "home": "/home/maikunari/Projects/firstmate",
+  "home": "/home/user/firstmate",
   "valid": true,
   "reason": null,
   "invalidity": {
@@ -13,21 +13,21 @@
   "state": "captain_decision",
   "active_children": [
     {
-      "id": "partsmap-extract-inline-applicable-model-42",
+      "id": "task-1",
       "kind": "ship",
       "state": "working",
-      "repo": "partsmap",
-      "name": "PartsMap: extract inline Applicable models lines",
+      "repo": "example-project",
+      "name": "Example task 1",
       "source": "run-step",
-      "doing": "validating (running) · run: 01M36H3SMSRTRPS6KW7TCD10DR"
+      "doing": "validating (running) \u00b7 run: 01M36H3SMSRTRPS6KW7TCD10DR"
     }
   ],
   "decisions_open": [
     {
-      "id": "rais-link-models-34-parts",
+      "id": "task-1",
       "key": "rais-link-models-34-parts",
       "verb": "captain-hold",
-      "summary": "RAIS: link applicable models on the 34 created parts",
+      "summary": "example open decision",
       "reason": "approve MCP write",
       "source": "backlog"
     }
@@ -37,7 +37,7 @@
   "landed": [],
   "endpoints": [
     {
-      "id": "partsmap-extract-inline-applicable-model-42",
+      "id": "task-1",
       "state": "working",
       "source": "run-step",
       "endpoint": {

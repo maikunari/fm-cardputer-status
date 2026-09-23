@@ -3,7 +3,7 @@
   "hold_classifier_schema": "fm-captain-hold-buckets.v1",
   "generated": "2026-09-23T07:52:15Z",
   "generated_epoch": 1790149935,
-  "home": "/home/maikunari/Projects/firstmate",
+  "home": "/home/user/firstmate",
   "valid": false,
   "reason": "child current state unavailable: evosus-helper-ui-polish-fix-nav-links",
   "invalidity": {
@@ -15,13 +15,13 @@
   "state": "unknown",
   "active_children": [
     {
-      "id": "evosus-helper-ui-polish-fix-nav-links",
+      "id": "task-1",
       "kind": "ship",
       "state": "working",
-      "repo": "evosus-helper",
-      "name": "Evosus Helper: polish UI + fix Lint/Cost unreliable",
+      "repo": "example-project",
+      "name": "Example task 1",
       "source": "status-log",
-      "doing": "reproduced — /api/lint returns bare unstyled HTML outside app shell; /cost-unreliable has no-shell empty state, picks la…"
+      "doing": "reproduced \u2014 /api/lint returns bare unstyled HTML outside app shell; /cost-unreliable has no-shell empty state, picks la\u2026"
     }
   ],
   "decisions_open": [],
@@ -30,7 +30,7 @@
   "landed": [],
   "endpoints": [
     {
-      "id": "evosus-helper-ui-polish-fix-nav-links",
+      "id": "task-1",
       "state": "unknown",
       "source": "status-log",
       "endpoint": {

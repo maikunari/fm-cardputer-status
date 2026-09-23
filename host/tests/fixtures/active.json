@@ -3,7 +3,7 @@
   "hold_classifier_schema": "fm-captain-hold-buckets.v1",
   "generated": "2026-09-23T07:52:15Z",
   "generated_epoch": 1790149935,
-  "home": "/home/maikunari/Projects/firstmate",
+  "home": "/home/user/firstmate",
   "valid": true,
   "reason": null,
   "invalidity": {
@@ -13,33 +13,33 @@
   "state": "active_child_work",
   "active_children": [
     {
-      "id": "evosus-helper-ui-polish-fix-nav-links",
+      "id": "task-1",
       "kind": "ship",
       "state": "working",
-      "repo": "evosus-helper",
-      "name": "Evosus Helper: polish UI + fix Lint/Cost unreliable",
+      "repo": "example-project",
+      "name": "Example task 1",
       "source": "status-log",
-      "doing": "reproduced — /api/lint returns bare unstyled HTML outside app shell; /cost-unreliable has no-shell empty state, picks la…"
+      "doing": "reproduced \u2014 /api/lint returns bare unstyled HTML outside app shell; /cost-unreliable has no-shell empty state, picks la\u2026"
     },
     {
-      "id": "partsmap-extract-inline-applicable-model-42",
+      "id": "task-2",
       "kind": "ship",
       "state": "working",
-      "repo": "partsmap",
-      "name": "PartsMap: extract inline Applicable models lines",
+      "repo": "example-project",
+      "name": "Example task 2",
       "source": "run-step",
-      "doing": "validating (running) · run: 01M36H3SMSRTRPS6KW7TCD10DR"
+      "doing": "validating (running) \u00b7 run: 01M36H3SMSRTRPS6KW7TCD10DR"
     }
   ],
   "decisions_open": [],
   "holds": [
     {
-      "id": "rais-rewrite-34-descriptions-extract-mod-79",
+      "id": "task-1",
       "title": "rais-rewrite-34-descriptions-extract-mod-79",
       "blocked_by": null,
       "blocked_by_ids": [],
       "unresolved_blocker_ids": [],
-      "reason": "ack option (c) — waiting for MCP part-description write tool to deploy; rewrites.json + interim report.md ready, nothing…",
+      "reason": "ack option (c) \u2014 waiting for MCP part-description write tool to deploy; rewrites.json + interim report.md ready, nothing\u2026",
       "source": "child-state"
     }
   ],
@@ -47,7 +47,7 @@
   "landed": [],
   "endpoints": [
     {
-      "id": "evosus-helper-ui-polish-fix-nav-links",
+      "id": "task-1",
       "state": "working",
       "source": "status-log",
       "endpoint": {
@@ -60,7 +60,7 @@
       }
     },
     {
-      "id": "partsmap-extract-inline-applicable-model-42",
+      "id": "task-2",
       "state": "working",
       "source": "run-step",
       "endpoint": {

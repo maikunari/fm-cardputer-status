@@ -23,14 +23,14 @@ class RuleBranches(unittest.TestCase):
     def test_active_is_yellow_with_first_child(self):
         status, _ = ev(load("active"))
         self.assertEqual(status["level"], "yellow")
-        self.assertEqual(status["label"], "2 working - Evosus Helper: polish UI...")
+        self.assertEqual(status["label"], "2 working - Example task 1")
         self.assertEqual(status["n"], {"calls": 0, "working": 2, "held": 1})
         self.assertEqual(status["age"], 30)
 
     def test_captain_decision_is_red_immediately(self):
         status, _ = ev(load("captain_decision"))
         self.assertEqual(status["level"], "red")
-        self.assertEqual(status["label"], "1 call - RAIS: link applicable models...")
+        self.assertEqual(status["label"], "1 call - example open decision")
         self.assertEqual(status["n"]["calls"], 1)
 
     def test_captain_decision_without_listed_decision_is_still_red(self):
@@ -109,11 +109,11 @@ class Debounce(unittest.TestCase):
 
     def test_failed_endpoint_is_debounced_red(self):
         summary = load("idle")
-        summary["endpoints"] = [{"id": "partsmap-x", "state": "failed", "source": "status-log"}]
+        summary["endpoints"] = [{"id": "crew-x", "state": "failed", "source": "status-log"}]
         status, memory = ev(summary, now=NOW)
         self.assertEqual(status["level"], "green")
         status, _ = ev(summary, now=NOW + 60, memory=memory)
-        self.assertEqual((status["level"], status["label"]), ("red", "1 call - failed: partsmap-x"))
+        self.assertEqual((status["level"], status["label"]), ("red", "1 call - failed: crew-x"))
 
     def test_custom_debounce(self):
         status, _ = ev(load("blocked"), debounce_s=0)

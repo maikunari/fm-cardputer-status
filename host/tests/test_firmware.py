@@ -170,7 +170,7 @@ class FetchAgainstPublisher(PublisherCase):
     def test_fetch_red(self):
         payload = self.app("tok").fetch()
         self.assertEqual(payload["level"], "red")
-        self.assertEqual(payload["label"], "1 call - RAIS: link applicable models...")
+        self.assertEqual(payload["label"], "1 call - example open decision")
 
     def test_fetch_wrong_token(self):
         with self.assertRaises(ValueError) as ctx:
