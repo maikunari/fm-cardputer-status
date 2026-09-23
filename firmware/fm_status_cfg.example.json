@@ -1,0 +1,8 @@
+{
+  "ssid": "your-2.4ghz-ssid",
+  "psk": "your-wifi-password",
+  "url": "http://192.168.1.50:8765/status",
+  "token": "paste-the-same-value-as-FMS_TOKEN",
+  "poll_s": 5,
+  "chirp": false
+}

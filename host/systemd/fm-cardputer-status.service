@@ -1,0 +1,20 @@
+# systemd --user unit for the fm-cardputer-status publisher.
+# Installed by host/install-service.sh, which replaces @HOST_DIR@ with this
+# checkout's host/ directory. Settings live in the env file (see env.example).
+[Unit]
+Description=Firstmate Cardputer status publisher (read-only)
+Documentation=file://@HOST_DIR@/../README.md
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+EnvironmentFile=%h/.config/fm-cardputer-status/env
+WorkingDirectory=@HOST_DIR@
+ExecStart=/usr/bin/python3 -m fmstatus.publisher
+Restart=on-failure
+# Binding the LAN IP fails until the network is up; keep retrying.
+RestartSec=10
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=default.target
