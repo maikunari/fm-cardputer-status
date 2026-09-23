@@ -4,7 +4,7 @@ Polls the fm-cardputer-status publisher on the desk machine over Wi-Fi and
 paints the whole 240x135 screen one colour:
 
   green   ready: nothing running, nothing waiting on the captain
-  yellow  working: calm sailboat (no WORKING banner) — fleet under way
+  yellow  working: at least one crew is busy
   red     needs you: an open captain call (or a crew stuck past the debounce)
   stale   no fresh data: never trust an old green
 
@@ -41,15 +41,11 @@ WHITE = 0xFFFFFF
 CREAM = 0xF0EEE6
 DARK = 0x1F1F1F
 GRAY = 0x9E9E9E
-SEA = 0x0B1220
-SEA_WAVE = 0x1B3A5F
-BOAT = 0xD4A84B
-BOAT_HULL = 0xC9A227
 
-# level -> (background, text, title). Yellow title is unused; boat means working.
+# level -> (background, text, title)
 STYLE = {
     "red": (0xC62828, WHITE, "NEEDS YOU"),
-    "yellow": (SEA, CREAM, ""),
+    "yellow": (0xFFB300, BLACK, "WORKING"),
     "green": (0x2E7D32, WHITE, "READY"),
     "stale": (0x37474F, 0xB0BEC5, "STALE"),
 }
@@ -66,43 +62,6 @@ DEMO = (
 
 # ---------------------------------------------------------------- pure helpers
 # No device imports below this line until run(); host tests exercise these.
-
-def draw_boat(lcd, cx, cy, scale=1):
-    """Minimal Firstmate-style sailboat (hull + mast + triangle sail).
-
-    Drawn with fill/line primitives so UiFlow2 needs no image assets.
-    cx, cy = hull center. scale is integer 1 or 2.
-    """
-    s = int(scale) if scale else 1
-    if s < 1:
-        s = 1
-    # hull (trapezoid via two triangles + mid rect)
-    hx, hy = cx, cy
-    w, h = 22 * s, 7 * s
-    try:
-        lcd.fillTriangle(hx - w, hy, hx + w, hy, hx + w - 4 * s, hy + h, BOAT_HULL)
-        lcd.fillTriangle(hx - w, hy, hx - w + 4 * s, hy + h, hx + w - 4 * s, hy + h, BOAT_HULL)
-        lcd.fillRect(hx - w + 4 * s, hy, (2 * w - 8 * s), h, BOAT_HULL)
-    except Exception:
-        lcd.fillRect(hx - w // 2, hy, w, h, BOAT_HULL)
-    # mast
-    mx, my = hx - 2 * s, hy - 22 * s
-    try:
-        lcd.fillRect(mx, my, 2 * s, 22 * s, BOAT)
-    except Exception:
-        pass
-    # sail (right triangle)
-    try:
-        lcd.fillTriangle(
-            mx + 2 * s, my + 2 * s,
-            mx + 2 * s, my + 18 * s,
-            mx + 16 * s, my + 18 * s,
-            BOAT,
-        )
-    except Exception:
-        lcd.fillRect(mx + 2 * s, my + 6 * s, 12 * s, 10 * s, BOAT)
-
-
 
 def parse_url(url):
     """'http://host[:port]/path?q' -> (host, port, path_and_query)."""
@@ -351,39 +310,17 @@ class App:
             print("fm_status: poll failed:", e)
 
     # -- screen -----------------------------------------------------------
-    def paint(self, level, label, footer, now_ms=0):
+    def paint(self, level, label, footer):
         lcd = self.lcd
         bg, fg, title = STYLE[level]
-        # Working (yellow): calm boat scene; bob every ~400 ms so it feels alive.
-        if level == "yellow":
-            bob = 1 if ((now_ms // 400) % 2) == 0 else 0
-            key = (level, label, bob)
-            if key != self.shown:
-                lcd.fillScreen(bg)
-                # soft wave band
-                try:
-                    lcd.fillRect(0, H - FOOTER_H - 10, W, 10, SEA_WAVE)
-                except Exception:
-                    pass
-                draw_boat(lcd, W // 2, 78 + bob, 2)
-                # short task label under boat (no WORKING banner)
-                lcd.setTextColor(fg, bg)
-                lcd.setTextSize(1)
-                line = fit(label, W - 16, lcd.textWidth)
-                lcd.drawString(line, (W - lcd.textWidth(line)) // 2, H - FOOTER_H - 28)
-                self.shown = key
-                self.shown_footer = None
-        elif (level, label) != self.shown:
+        if (level, label) != self.shown:
             lcd.fillScreen(bg)
             lcd.setTextColor(fg, bg)
-            if title:
-                lcd.setTextSize(3)
-                lcd.drawString(title, (W - lcd.textWidth(title)) // 2, 10)
+            lcd.setTextSize(3)
+            lcd.drawString(title, (W - lcd.textWidth(title)) // 2, 10)
             lcd.setTextSize(2)
             lines = wrap2(label, W - 12, lcd.textWidth)
             y = 58 if len(lines) == 2 else 68
-            if not title:
-                y = 40
             for line in lines:
                 lcd.drawString(line, (W - lcd.textWidth(line)) // 2, y)
                 y += 22
@@ -419,7 +356,7 @@ class App:
             if self.last_err and level == "stale":
                 footer = self.last_err + "  " + footer
             self.chirp_on_red(level)
-        self.paint(level, label, footer, now)
+        self.paint(level, label, footer)
 
     def set_brightness(self):
         try:
