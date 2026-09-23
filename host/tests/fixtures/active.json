@@ -35,7 +35,7 @@
   "holds": [
     {
       "id": "task-1",
-      "title": "rais-rewrite-34-descriptions-extract-mod-79",
+      "title": "task-held-1",
       "blocked_by": null,
       "blocked_by_ids": [],
       "unresolved_blocker_ids": [],

@@ -25,7 +25,7 @@
   "decisions_open": [
     {
       "id": "task-1",
-      "key": "rais-link-models-34-parts",
+      "key": "decision-key-1",
       "verb": "captain-hold",
       "summary": "example open decision",
       "reason": "approve MCP write",

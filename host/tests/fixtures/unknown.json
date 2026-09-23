@@ -5,11 +5,11 @@
   "generated_epoch": 1790149935,
   "home": "/home/user/firstmate",
   "valid": false,
-  "reason": "child current state unavailable: evosus-helper-ui-polish-fix-nav-links",
+  "reason": "child current state unavailable: task-unknown-1",
   "invalidity": {
     "kind": "child_current_unavailable",
     "ids": [
-      "evosus-helper-ui-polish-fix-nav-links"
+      "task-unknown-1"
     ]
   },
   "state": "unknown",

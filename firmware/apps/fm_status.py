@@ -54,8 +54,8 @@ BRIGHTNESS = (40, 120, 255)
 
 DEMO = (
     {"v": 1, "level": "green", "label": "ready - 1 held", "n": {"calls": 0, "working": 0, "held": 1}, "age": 12, "seq": 1},
-    {"v": 1, "level": "yellow", "label": "2 working - Evosus Helper: polish UI...", "n": {"calls": 0, "working": 2, "held": 0}, "age": 40, "seq": 2},
-    {"v": 1, "level": "red", "label": "1 call - RAIS: link applicable models...", "n": {"calls": 1, "working": 1, "held": 0}, "age": 7, "seq": 3},
+    {"v": 1, "level": "yellow", "label": "2 working - Example task 1...", "n": {"calls": 0, "working": 2, "held": 0}, "age": 40, "seq": 2},
+    {"v": 1, "level": "red", "label": "1 call - example open decision...", "n": {"calls": 1, "working": 1, "held": 0}, "age": 7, "seq": 3},
     {"v": 1, "level": "stale", "label": "fm stale 16m", "n": {"calls": 0, "working": 0, "held": 0}, "age": 960, "seq": 4},
 )
 

@@ -98,9 +98,9 @@ class Layout(unittest.TestCase):
         self.assertLessEqual(measure(cut), 228)
 
     def test_wrap2_splits_on_words_and_cuts_second_line(self):
-        lines = fm.wrap2("2 working - Evosus Helper: polish UI and a lot more text", 228, measure)
+        lines = fm.wrap2("2 working - Example task name and a lot more text", 228, measure)
         self.assertEqual(len(lines), 2)
-        self.assertEqual(lines[0], "2 working - Evosus")
+        self.assertEqual(lines[0], "2 working - Example")
         self.assertTrue(all(measure(line) <= 228 for line in lines))
         self.assertTrue(lines[1].endswith(".."))
 
